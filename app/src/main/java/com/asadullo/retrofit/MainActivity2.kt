@@ -32,6 +32,10 @@ class MainActivity2 : AppCompatActivity() {
             finish()
         }
 
+        binding.false1.setOnClickListener {
+            binding.dateName.text = "00-00-0000"
+        }
+
         if (pos == 1){
             edit()
         }else{
@@ -58,7 +62,6 @@ class MainActivity2 : AppCompatActivity() {
         binding.holat.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 text = parent?.getItemAtPosition(position).toString()
-                Toast.makeText(this@MainActivity2, "$text", Toast.LENGTH_SHORT).show()
                 binding.holat.setSelection(position)
             }
 
@@ -83,19 +86,23 @@ class MainActivity2 : AppCompatActivity() {
         val sdf = SimpleDateFormat("dd-MM-yyyy")
 
         binding.done.setOnClickListener {
-            val post = post(text, binding.edtName.text.toString(), sdf.format(calendar.time), binding.edtDescription.text.toString())
-            Client.getService()
-                .add(post)
-                .enqueue(object : Callback<MyData> {
-                    override fun onResponse(call: Call<MyData>, response: Response<MyData>) {
-                        Toast.makeText(this@MainActivity2, "Save", Toast.LENGTH_SHORT).show()
-                        finish()
-                    }
+            if (binding.dateName.text.toString() == "00-00-0000"){
+                Toast.makeText(this, "Sanani kiriting", Toast.LENGTH_SHORT).show()
+            }else{
+                val post = post(text, binding.edtDescription.text.toString(), sdf.format(calendar.time), binding.edtName.text.toString())
+                Client.getService()
+                    .add(post)
+                    .enqueue(object : Callback<MyData> {
+                        override fun onResponse(call: Call<MyData>, response: Response<MyData>) {
+                            Toast.makeText(this@MainActivity2, "Save", Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
 
-                    override fun onFailure(call: Call<MyData>, t: Throwable) {
-                        Toast.makeText(this@MainActivity2, "Error", Toast.LENGTH_SHORT).show()
-                    }
-                })
+                        override fun onFailure(call: Call<MyData>, t: Throwable) {
+                            Toast.makeText(this@MainActivity2, "Error", Toast.LENGTH_SHORT).show()
+                        }
+                    })
+            }
         }
     }
 
@@ -114,7 +121,6 @@ class MainActivity2 : AppCompatActivity() {
         binding.holat.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 text = parent?.getItemAtPosition(position).toString()
-                Toast.makeText(this@MainActivity2, "$text", Toast.LENGTH_SHORT).show()
                 binding.holat.setSelection(position)
             }
 
@@ -124,7 +130,7 @@ class MainActivity2 : AppCompatActivity() {
         }
 
         val user = intent.getSerializableExtra("MyData") as MyData
-        binding.edtName.setText(user.matn)
+        binding.edtName.setText(user.sarlavha)
         binding.dateName.setText(user.oxirgi_muddat)
         when(user.holat){
             "Kiritilmoqda"->{
@@ -137,7 +143,7 @@ class MainActivity2 : AppCompatActivity() {
                 binding.holat.setSelection(0)
             }
         }
-        binding.edtDescription.setText(user.sarlavha)
+        binding.edtDescription.setText(user.matn)
 
         val calendar = Calendar.getInstance()
         val datePicker = DatePickerDialog.OnDateSetListener { datePicker, i, i2, i3 ->
@@ -155,18 +161,27 @@ class MainActivity2 : AppCompatActivity() {
         val sdf = SimpleDateFormat("dd-MM-yyyy")
 
         binding.done.setOnClickListener {
-            val post = post(text, binding.edtName.text.toString(), sdf.format(calendar.time), binding.edtDescription.text.toString())
-            Client.getService().uptade(user.id, post)
-                .enqueue(object : Callback<MyData>{
-                    override fun onResponse(call: Call<MyData>, response: Response<MyData>) {
-                        Toast.makeText(this@MainActivity2, "Edit", Toast.LENGTH_SHORT).show()
-                        finish()
-                    }
+            if (binding.dateName.text.toString() == "00-00-0000"){
+                Toast.makeText(this, "Sanani kiriting", Toast.LENGTH_SHORT).show()
+            }else {
+                val post = post(
+                    text,
+                    binding.edtDescription.text.toString(),
+                    sdf.format(calendar.time),
+                    binding.edtName.text.toString()
+                )
+                Client.getService().uptade(user.id, post)
+                    .enqueue(object : Callback<MyData> {
+                        override fun onResponse(call: Call<MyData>, response: Response<MyData>) {
+                            Toast.makeText(this@MainActivity2, "Edit", Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
 
-                    override fun onFailure(call: Call<MyData>, t: Throwable) {
-                        Toast.makeText(this@MainActivity2, "Error", Toast.LENGTH_SHORT).show()
-                    }
-                })
+                        override fun onFailure(call: Call<MyData>, t: Throwable) {
+                            Toast.makeText(this@MainActivity2, "Error", Toast.LENGTH_SHORT).show()
+                        }
+                    })
+            }
         }
 
     }

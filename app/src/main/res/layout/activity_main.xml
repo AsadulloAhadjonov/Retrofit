@@ -20,13 +20,13 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:layout_margin="20dp"
+        android:layout_margin="@dimen/_18sdp"
         android:layout_height="wrap_content">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Mening kunim"
-        android:textSize="22dp"
+        android:textSize="@dimen/_20sdp"
         android:textColor="#fff"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="date"
-            android:textSize="12dp"
+            android:textSize="@dimen/_10sdp"
             android:textColor="#fff"
             />
     </LinearLayout>
@@ -45,7 +45,7 @@
         android:id="@+id/referesh"
         android:layout_width="match_parent"
         app:layout_constraintTop_toBottomOf="@id/ln"
-        android:layout_height="783dp">
+        android:layout_height="@dimen/_595sdp">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

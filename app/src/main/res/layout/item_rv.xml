@@ -4,9 +4,9 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:background="@drawable/bac_1"
-    android:elevation="10dp"
-    android:padding="10dp"
-    android:layout_margin="10dp"
+    android:elevation="@dimen/_7sdp"
+    android:padding="@dimen/_7sdp"
+    android:layout_margin="@dimen/_7sdp"
     >
 
     <LinearLayout
@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:text="@string/app_name"
             android:textColor="#fff"
-            android:textSize="18sp"
+            android:textSize="@dimen/_15sdp"
             />
 
         <TextView
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:text="@string/app_name"
             android:textColor="#fff"
-            android:textSize="10sp"
+            android:textSize="@dimen/_8ssp"
             android:layout_weight="1"
             android:textAlignment="textEnd"
             />
