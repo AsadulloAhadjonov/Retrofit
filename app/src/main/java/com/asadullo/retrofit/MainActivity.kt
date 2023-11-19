@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.asadullo.retrofit.databinding.ActivityMainBinding
-import com.asadullo.retrofit.databinding.DialogItemBinding
 import com.asadullo.retrofit.models.MyData
 import com.asadullo.retrofit.models.post
 import com.asadullo.retrofit.retrofit.Client
