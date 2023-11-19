@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">retrofit</string>
+    <string-array name="planets_array">
+        <item>Kiritilmoqda</item>
+        <item>Bajarilmoqda</item>
+        <item>Bajarildi</item>
+    </string-array>
 </resources>

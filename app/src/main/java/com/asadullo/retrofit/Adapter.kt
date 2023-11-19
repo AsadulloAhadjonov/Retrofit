@@ -11,9 +11,8 @@ class Adapter(var click: click, var list: ArrayList<MyData>) : RecyclerView.Adap
         fun onBind(user: MyData) {
             item.name.text = user.sarlavha
             item.number.text = user.matn
-            item.root.setOnLongClickListener {
+            item.delete.setOnClickListener {
                 click.click(user)
-                true
             }
 
             item.root.setOnClickListener {

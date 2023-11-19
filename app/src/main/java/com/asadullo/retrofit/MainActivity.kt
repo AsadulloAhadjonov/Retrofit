@@ -1,11 +1,14 @@
 package com.asadullo.retrofit
 
+import android.annotation.SuppressLint
 import android.content.DialogInterface
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.asadullo.retrofit.databinding.ActivityMainBinding
 import com.asadullo.retrofit.databinding.DialogItemBinding
 import com.asadullo.retrofit.models.MyData
@@ -15,41 +18,53 @@ import com.asadullo.retrofit.retrofit.Service
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class MainActivity : AppCompatActivity(), click {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private lateinit var list:List<MyData>
+    private lateinit var adapter: Adapter
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+
+
+        val swipeRefreshLayout:SwipeRefreshLayout = binding.referesh
+        swipeRefreshLayout.setOnRefreshListener {
+            adapter.notifyDataSetChanged()
+            swipeRefreshLayout.isRefreshing = false
+            load()
+        }
+
+        val currentDate = Calendar.getInstance().time
+
+        val calendar = Calendar.getInstance()
+        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+
+        val monthFormat = SimpleDateFormat("MMMM", Locale.getDefault())
+        val monthName = monthFormat.format(currentDate)
+
+        val dayOfWeekName = when (dayOfWeek) {
+            Calendar.SUNDAY -> "Yakshanba"
+            Calendar.MONDAY -> "Dushanba"
+            Calendar.TUESDAY -> "Seshanba"
+            Calendar.WEDNESDAY -> "Chorshanba"
+            Calendar.THURSDAY -> "Payshanba"
+            Calendar.FRIDAY -> "Juma"
+            Calendar.SATURDAY -> "Shanba"
+            else -> ""
+        }
+        val resultText = "$dayOfWeekName, ${calendar.get(Calendar.DAY_OF_MONTH)} - $monthName"
+        binding.date.text = resultText
         load()
 
         binding.add.setOnClickListener {
-            val dialog = AlertDialog.Builder(this).create()
-            val item = DialogItemBinding.inflate(layoutInflater)
-
-
-            item.btn.setOnClickListener {
-                val post = post(item.holat.text.toString(), item.text.text.toString(), item.lastDate.text.toString(), item.title.text.toString())
-                Client.getService()
-                    .add(post)
-                    .enqueue(object : Callback<MyData> {
-                        override fun onResponse(call: Call<MyData>, response: Response<MyData>) {
-                            Toast.makeText(this@MainActivity, "Save", Toast.LENGTH_SHORT).show()
-                            dialog.cancel()
-                            load()
-                        }
-
-                        override fun onFailure(call: Call<MyData>, t: Throwable) {
-
-                        }
-                    })
-            }
-            dialog.setView(item.root)
-
-
-
-            dialog.show()
+            startActivity(Intent(this, MainActivity2::class.java))
         }
     }
 
@@ -58,13 +73,14 @@ class MainActivity : AppCompatActivity(), click {
         val get = Client.getService().get()
         get.enqueue(object : Callback<List<MyData>>{
             override fun onResponse(call: Call<List<MyData>>, response: Response<List<MyData>>) {
-                val list = response.body()
-                binding.rv.adapter = Adapter(this@MainActivity, list as ArrayList<MyData>)
+                list = response.body()!!
+                adapter = Adapter(this@MainActivity, list as ArrayList<MyData>)
+                binding.rv.adapter = adapter
                 binding.prog.visibility = View.GONE
             }
 
             override fun onFailure(call: Call<List<MyData>>, t: Throwable) {
-                TODO("Not yet implemented")
+                Toast.makeText(this@MainActivity, "Internet bilan aloqa yo'q", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -92,27 +108,9 @@ class MainActivity : AppCompatActivity(), click {
     }
 
     override fun uptade(user: MyData) {
-        val dialog = AlertDialog.Builder(this).create()
-        val item = DialogItemBinding.inflate(layoutInflater)
-        dialog.setView(item.root)
-        item.title.setText(user.sarlavha)
-        item.text.setText(user.matn)
-        item.holat.setText(user.holat)
-        item.lastDate.setText(user.oxirgi_muddat)
-        item.btn.setOnClickListener {
-            val post = post(item.holat.text.toString(), item.text.text.toString(), item.lastDate.text.toString(), item.title.text.toString())
-            Client.getService().uptade(user.id, post)
-                .enqueue(object : Callback<MyData>{
-                    override fun onResponse(call: Call<MyData>, response: Response<MyData>) {
-                        Toast.makeText(this@MainActivity, "Edit", Toast.LENGTH_SHORT).show()
-                        load()
-                    }
-
-                    override fun onFailure(call: Call<MyData>, t: Throwable) {
-                        Toast.makeText(this@MainActivity, "Error", Toast.LENGTH_SHORT).show()
-                    }
-                })
-        }
-        dialog.show()
+        val intent = Intent(this, MainActivity2::class.java)
+        intent.putExtra("MyData", user)
+        intent.putExtra("pos", 1)
+        startActivity(intent)
     }
 }

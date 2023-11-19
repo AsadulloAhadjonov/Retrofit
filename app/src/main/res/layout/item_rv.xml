@@ -3,25 +3,45 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="20dp"
+    android:background="@drawable/bac_1"
+    android:elevation="10dp"
+    android:padding="10dp"
+    android:layout_margin="10dp"
     >
 
-    <TextView
-        android:id="@+id/name"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textSize="18sp"
-        />
-
-    <TextView
-        android:id="@+id/number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textSize="18sp"
+        android:orientation="vertical"
         android:layout_weight="1"
-        android:textAlignment="textEnd"
+        >
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            />
+
+        <TextView
+            android:id="@+id/number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="#fff"
+            android:textSize="10sp"
+            android:layout_weight="1"
+            android:textAlignment="textEnd"
+            />
+    </LinearLayout>
+    
+    <ImageView
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_delete_24"
+        android:layout_gravity="center_vertical"
         />
 
 </LinearLayout>
